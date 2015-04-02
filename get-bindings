@@ -63,7 +63,7 @@ function list_web_config_http_hosts( $d = "C:\inetpub" )
 	}
 }
 
-function list_app_host_config_aliases()
+function list_app_host_config_binding_info()
 {
 	$break = "\r\n";
 	// just copying this to the desktop for now. Permission error trying to read it from C:\windows\system32\inetsrv\config
@@ -94,7 +94,7 @@ if ( $arg_1 )
 			echo $err[1]; 
 	}
     else if ( 'apphost' == $arg_1 )
-		list_app_host_config_aliases();
+		list_app_host_config_binding_info();
     else
         echo $err[0];
 } else
