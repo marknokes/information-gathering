@@ -5,13 +5,12 @@ if ( !isset( $argv ) ) exit;
 
 error_reporting(0);
 
-$dir = "YOUR_WWW_ROOT_DIR";
-$email_to = "YOUR_EMAIL_TO";
-$email_from = "YOUR_EMAIL_FROM";
-
-$results = array();
-
-$dir = new RecursiveDirectoryIterator( $dir );
+$path       = "C:\\path\\to\\directory";
+$email_to   = "email@domain.com";
+$email_from = "email@domain.com";
+$ignore     = array( "200", "301", "302", "303", "401", "999" ); // LinkedIn returns 999 so we'll just ignore it I suppose.
+$results    = array();
+$dir        = new RecursiveDirectoryIterator( $path );
 
 foreach( new RecursiveIteratorIterator( $dir ) as $file )
 {
@@ -39,7 +38,7 @@ foreach( new RecursiveIteratorIterator( $dir ) as $file )
         		{
         			$response_code = substr( $headers[0], 9, 3 );
 
-        			if ( "200" !== $response_code )
+        			if ( !in_array( $response_code, $ignore ) )
         				$results[ $response_code ][] = "Dir: " . $dir . " URL: " . $url;
         		}
         		else
@@ -72,6 +71,8 @@ else
 
 		$message .= "\r\n";
 	}
+
+    $message .= "\r\n" . "This email was generated from a script on the web server. For more infomation view the scheduled task.";
 }
 
 return mail( $email_to, $subject, $message, $headers );
